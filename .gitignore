@@ -1,0 +1,41 @@
+# --- Secrets: never commit ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+deploy/certs/
+
+# --- Python ---
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Web app (frontend/) ---
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# --- Runtime data: raw uploaded files, watched folders, model weights ---
+data/
+sources/
+models/
+*.log
+
+# --- Third-party source cloned for local builds (pgvector for Windows) ---
+pgvector/
+
+# --- Editors and OS ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini

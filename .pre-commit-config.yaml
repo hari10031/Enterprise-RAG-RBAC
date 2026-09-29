@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff
+        entry: uv run ruff check
+        language: system
+        types: [python]
+      - id: pytest-fast
+        name: pytest (no database)
+        entry: uv run pytest -q -m "not db"
+        language: system
+        pass_filenames: false
+        types: [python]

@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@import "@fontsource/atkinson-hyperlegible/400.css";
+@import "@fontsource/atkinson-hyperlegible/700.css";
+@import "@fontsource-variable/source-serif-4";
+
+@theme {
+  --font-sans: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", Georgia, serif;
+
+  --color-paper: #f6f7f4;
+  --color-sheet: #ffffff;
+  --color-ink: #18212a;
+  --color-graphite: #58636c;
+  --color-rule: #d8ddd6;
+  --color-wash: #eceee9;
+  --color-evergreen: #0d6b5b;
+  --color-evergreen-deep: #0a5347;
+  --color-evergreen-wash: #e3efeb;
+  --color-amber: #a15c07;
+  --color-amber-wash: #fbf1e1;
+  --color-danger: #b42318;
+  --color-danger-wash: #fbe9e7;
+
+}
+
+/* Source hues: one per passage number, always shown with the number. On :root because they are read by
+   inline styles, and Tailwind only emits @theme variables that a utility uses. */
+:root {
+  --color-src-1: #0d6b5b;
+  --color-src-2: #3d4fa3;
+  --color-src-3: #8a3b78;
+  --color-src-4: #8a5a00;
+  --color-src-5: #33658a;
+  --color-src-6: #5c6b1f;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-evergreen);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  button:not(:disabled),
+  a,
+  [role="button"] {
+    cursor: pointer;
+  }
+}
+
+/* Answer and passage prose: documents read as documents. */
+.prose-doc {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+.prose-doc p + p,
+.prose-doc p + ul,
+.prose-doc ul + p {
+  margin-top: 0.75em;
+}
+.prose-doc ul {
+  list-style: disc;
+  padding-left: 1.25em;
+}
+.prose-doc li + li {
+  margin-top: 0.25em;
+}
+
+.streaming > p:last-child::after,
+.streaming > ul:last-child > li:last-child::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--color-evergreen);
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.panel-enter {
+  animation: panel-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes panel-in {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .streaming > p:last-child::after,
+  .streaming > ul:last-child > li:last-child::after,
+  .panel-enter {
+    animation: none;
+  }
+}

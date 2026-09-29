@@ -1,0 +1,5 @@
+{"id": "hr-1", "question": "How many paid sick days do full-time staff get?", "split": "tune", "answerable": true, "relevant": ["12 days of paid sick leave"]}
+{"id": "hr-2", "question": "Do unused sick days roll over?", "split": "tune", "answerable": true, "relevant": ["do not carry over"]}
+{"id": "all-1", "question": "Which form do I use for expense claims?", "split": "tune", "answerable": true, "relevant": ["EXP-7"]}
+{"id": "none-1", "question": "What is the parking policy at the Berlin office?", "split": "tune", "answerable": false, "relevant": []}
+{"id": "final-1", "question": "When should I tell my manager I am ill?", "split": "final", "answerable": true, "relevant": ["before your shift starts"]}
