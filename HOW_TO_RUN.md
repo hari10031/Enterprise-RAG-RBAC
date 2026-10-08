@@ -58,7 +58,28 @@ All commands run from the project folder:
 cd "M:\3-1\Enterpirse RAG -RBAC"
 ```
 
-### 3.1 Install PostgreSQL and pgvector
+### 3.1 Database: Neon (recommended)
+
+Neon is hosted Postgres with pgvector already available, so nothing needs installing or building on Windows.
+
+1. Create a project at https://neon.tech and pick the region nearest you.
+2. In **Connection details**, turn **off** "Connection pooling" and copy the **direct** string (the host has no
+   `-pooler`). psycopg prepares statements automatically, and that can conflict with the pooler.
+3. Put it in `.env` as `DATABASE_URL=...?sslmode=require`. The migration (step 3.4) runs
+   `CREATE EXTENSION IF NOT EXISTS vector`, so pgvector is enabled automatically.
+4. **For the tests:** create a branch (for example `test`), create a database named `eka_test` on it, and use that
+   branch's direct string as `TEST_DATABASE_URL`. The ACL matrix wipes that database. Never point it at your main
+   branch.
+5. Optional check, in Neon's SQL editor: `SELECT extversion FROM pg_extension WHERE extname='vector';` should show
+   0.8 or later.
+
+**Trade-off:** all document text, users, password hashes and chat history are stored in Neon's cloud, so use it only
+for documents you are allowed to put there. If Neon has been idle, the first query waits about a second while it
+wakes up.
+
+Skip to step 3.2.
+
+### 3.1b Alternative: local PostgreSQL and pgvector
 
 1. Install PostgreSQL 16 with the EDB installer. Keep the default port 5432.
 2. Install pgvector. There is no Windows installer, so build it once:
@@ -201,6 +222,31 @@ It refuses to run on a database whose name does not contain `test`, because it d
 Expected result: `33 passed`.
 
 (`make check` runs lint, types and tests together.)
+
+### 3.8b End-to-end smoke test (every case, against the running stack)
+
+With the API and worker running, and an admin account in `.env` (`SMOKE_ADMIN_EMAIL`, `SMOKE_ADMIN_PASSWORD`):
+
+```powershell
+uv run --env-file .env python scripts/smoke_e2e.py      # or: make smoke
+```
+
+It checks 50 cases against the real database and LLM, then cleans up after itself (about 6 LLM calls):
+
+- health of the database, LLM and worker;
+- folder and upload ingestion, file-type rejection, and upload sharing rules;
+- admin-only endpoints;
+- answers, citations and follow-ups;
+- canaries never crossing groups;
+- the citation preview, and immediate revocation when sharing or membership changes;
+- stop, feedback and the rate limit;
+- account lockout, password change, deactivation and logout;
+- analytics.
+
+The exit code is 0 only if every check passes.
+
+**To stop the processes** started with the commands in this guide:
+`Get-CimInstance Win32_Process | ? { $_.CommandLine -match 'eka\.web\.app|eka\.worker|vite' } | % { Stop-Process -Id $_.ProcessId -Force }`
 
 ### 3.9 Run the retrieval evaluation
 

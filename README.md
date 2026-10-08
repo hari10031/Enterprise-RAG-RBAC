@@ -21,9 +21,10 @@ Step-by-step setup, verification checklist and troubleshooting: see [HOW_TO_RUN.
 
 Planes import only `core`; `web` and `worker.py` compose them.
 
-## Local setup (Windows, native Postgres)
+## Local setup (Windows)
 
-1. Install PostgreSQL 16 and pgvector 0.8 or later. Then create the database:
+1. Database: **Neon** (hosted Postgres with pgvector built in; see HOW_TO_RUN.md §3.1), or a local
+   PostgreSQL 16+ with pgvector 0.8+. For a local install, create the database:
    `CREATE DATABASE eka; CREATE USER eka PASSWORD 'eka'; ALTER DATABASE eka OWNER TO eka;`
    pgvector older than 0.8 still works, but ACL-filtered vector search can return fewer results.
 2. `copy .env.example .env`, then pick an LLM provider block (Nebius, Gemini, NVIDIA NIM or Ollama) and set its key.
@@ -68,6 +69,12 @@ the `local-llm` profile. The worker sits on an internal-only network. The api al
 reach the hosted LLM.
 
 ## Differences from the implementation draft
+
+- **Database on Neon (changes D20 and the threat model).** Hosted Postgres, chosen because pgvector has no Windows
+  installer. ACLs, vectors, keyword search and the job queue stay in one database, so the ACL filter still runs in the
+  same query as the vector search (D2, D15). A separate vector database (Pinecone or Chroma) was rejected: it needs
+  ACLs duplicated with no shared transaction (a revocation window), or post-filtering, which starves small groups of
+  results. The cost: the whole corpus is stored in Neon's cloud, not on the local machine.
 
 - **Hosted LLM by default (changes D10, D11 and the threat model).** The questions and retrieved passages the user
   may see go to the configured provider. The ACL still decides what is sent, but "no text leaves the machine" no

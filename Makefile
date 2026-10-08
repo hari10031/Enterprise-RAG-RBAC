@@ -2,7 +2,7 @@
 ENV := $(if $(wildcard .env),--env-file .env,)
 RUN := uv run $(ENV)
 
-.PHONY: install check lint test test-acl migrate api worker create-admin fmt web web-build eval
+.PHONY: install check lint test test-acl migrate api worker create-admin fmt web web-build eval smoke
 
 install:
 	uv sync
@@ -48,3 +48,7 @@ web-build:
 # Retrieval eval + ablations: make eval Q=eval/questions.jsonl U=you@company.test
 eval:
 	$(RUN) python -m eka.eval $(Q) --user $(U)
+
+# End-to-end smoke test against the running stack (api + worker): needs SMOKE_ADMIN_EMAIL / SMOKE_ADMIN_PASSWORD.
+smoke:
+	$(RUN) python scripts/smoke_e2e.py
