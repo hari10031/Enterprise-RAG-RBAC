@@ -55,6 +55,67 @@
   }
 }
 
+@layer components {
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] h2 {
+    flex: 0 0 auto;
+    margin-bottom: 0.125rem;
+  }
+
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] ul {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] li {
+    height: 2.375rem;
+  }
+
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] li > a {
+    min-height: 2.375rem;
+    height: 2.375rem;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] li > button {
+    width: 2.375rem;
+    height: 2.375rem;
+    min-height: 2.375rem;
+  }
+
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] a,
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] li {
+    min-width: 0;
+  }
+
+  aside:has(nav) nav > section[aria-labelledby="history-heading"] a span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  aside:has(nav) nav > section[aria-labelledby="admin-heading"] {
+    flex: 0 0 auto;
+  }
+
+  .sidebar-toggle {
+    border-radius: 999px;
+  }
+}
+
 /* Answer and passage prose: documents read as documents. */
 .prose-doc {
   font-family: var(--font-serif);
